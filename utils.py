@@ -35,7 +35,7 @@ def convert_resnet_family(model, se=False):
         features.append(model.layer0)
 
     for ind in range(1, 5):
-        modules_layer = model._modules[f'layer{ind}']._modules
+        modules_layer = model._modules['layer' + str(ind)]._modules
         new_modules = []
         for block_name in modules_layer:
             b = modules_layer[block_name]
@@ -133,7 +133,8 @@ class BottleneckResnetBlock(nn.Module):
             residual = self.downsample(x)
 
         if self.se_module is not None:
-            out += self.se_module(out) + residual
+            out += self.se_module(out)
+        out += residual
         out = self.relu(out)
 
         return out
